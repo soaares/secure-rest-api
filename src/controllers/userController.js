@@ -25,12 +25,12 @@ export const login = (request, response) => {
     }, (error, user) => {
         if (error) throw error
         if (!user) {
-            response.status(401).json({ message: 'Authentication failed. No user found' })
+            return response.status(401).json({ message: 'Authentication failed. No user found' })
         } else if (user) {
             if (!user.comparePassword(request.body.password, user.hashPassword)) {
-                response.status(401).json({ message: 'Authentication failed. Wrong password' })
+                return response.status(401).json({ message: 'Authentication failed. Wrong password' })
             } else {
-                return response.json({ token: user.email, username: user.username, _id: user.id }, 'security-api')
+                response.status(200).json({ token: user.email, username: user.username, _id: user.id }, 'security-api')
             }
         }
     })

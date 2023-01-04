@@ -15,7 +15,7 @@ const routes = (app) => {
             console.log(`Request from: ${req.originalUrl}`)
             console.log(`Request type: ${req.method}`)
             next();
-        }, getContacts)
+        }, loginRequired, getContacts)
 
         // POST endpoint
         .post(loginRequired, addNewContact);

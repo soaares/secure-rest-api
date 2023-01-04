@@ -22,6 +22,6 @@ export const UserSchema = new Schema({
     }
 });
 
-UserSchema.method.comparePassword = (password, hashPassword) => {
+UserSchema.methods.comparePassword = (password, hashPassword) => {
     return compareSync(password, hashPassword)
 }

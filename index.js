@@ -27,7 +27,6 @@ app.use((request, response, next) => {
             next()
         })
     } else {
-        console.log('else')
         request.user = undefined
         next()
     }
