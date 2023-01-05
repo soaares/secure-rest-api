@@ -1,17 +1,6 @@
-import mongoose from "mongoose";
 import bcrypt from 'bcrypt'
-import { UserSchema } from '../models/userModel'
 import jwt from 'jsonwebtoken'
 
-const User = mongoose.model('User', UserSchema);
-
-export const loginRequired = (request, response, next) => {
-    if (request.user) {
-        next()
-        return
-    }
-    return response.status(401).json({ message: 'Unauthorized user!' })
-}
 
 export const register = (request, response) => {
     const newUser = new User(request.body)
