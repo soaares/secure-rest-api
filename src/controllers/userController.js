@@ -1,11 +1,15 @@
 import mongoose from "mongoose";
 import bcrypt from 'bcrypt'
 import { UserSchema } from '../models/userModel'
+import jwt from 'jsonwebtoken'
 
 const User = mongoose.model('User', UserSchema);
 
 export const loginRequired = (request, response, next) => {
-    if (request.user) next()
+    if (request.user) {
+        next()
+        return
+    }
     return response.status(401).json({ message: 'Unauthorized user!' })
 }
 
@@ -25,12 +29,12 @@ export const login = (request, response) => {
     }, (error, user) => {
         if (error) throw error
         if (!user) {
-            return response.status(401).json({ message: 'Authentication failed. No user found' })
+            response.status(401).json({ message: 'Authentication failed. No user found' })
         } else if (user) {
             if (!user.comparePassword(request.body.password, user.hashPassword)) {
-                return response.status(401).json({ message: 'Authentication failed. Wrong password' })
+                response.status(401).json({ message: 'Authentication failed. Wrong password' })
             } else {
-                response.status(200).json({ token: user.email, username: user.username, _id: user.id }, 'security-api')
+                return response.status(200).json({ token: jwt.sign({ email: user.email, username: user.username, _id: user.id }, 'security-api') })
             }
         }
     })
